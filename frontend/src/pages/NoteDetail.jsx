@@ -6,7 +6,7 @@ import NoteAdd from "../components/NoteAdd";
 const NoteDetail = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
-  const [update, setUpdate] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const { id } = useParams();
   const [note, setNote] = useState();
   console.log(id);
@@ -43,10 +43,8 @@ const NoteDetail = () => {
   };
 
   const handleUpdate = () => {
-    setUpdate(true);
+    setOpenModal(true);
   };
-
-  console.log(error);
 
   useEffect(() => {
     fetchNote();
@@ -55,16 +53,20 @@ const NoteDetail = () => {
   return (
     <div className="p-10 relative min-h-[90vh]">
       {error && <Error error={error} />}
-      {update && (
+      {openModal && (
         <div className="absolute inset-0 z-10 bg-black p-10 bg-opacity-50">
           <div>
             <button
-              onClick={() => setUpdate(false)}
+              onClick={() => setOpenModal(false)}
               className="bg-white p-1 px-5 float-end"
             >
-              Çık
+              quit
             </button>
-            <NoteAdd updateNote={note} setUpdate={setUpdate} />
+            <NoteAdd
+              openModal={openModal}
+              noteData={note}
+              setOpenModal={setOpenModal}
+            />
           </div>
         </div>
       )}
@@ -73,19 +75,19 @@ const NoteDetail = () => {
           onClick={() => navigate("/")}
           className="bg-gray-600 hover:bg-gray-400 transition rounded-lg px-2 py-1 text-white "
         >
-          geri
+          back
         </button>
         <button
           onClick={handleUpdate}
           className="ms-5 bg-blue-600 hover:bg-blue-400 transition rounded-lg px-2 py-1 text-white "
         >
-          güncelle
+          update
         </button>
         <button
           onClick={handleDelete}
           className="ms-5 bg-red-600 hover:bg-red-400 transition rounded-lg px-2 py-1 text-white "
         >
-          sil
+          delete
         </button>
       </div>
       <h2 className="text-2xl">{note?.title}</h2>
